@@ -88,8 +88,8 @@ for j, h in enumerate(H):
     for q, m in enumerate(M_sys):
         G_tmp[j, :, q] = - T * ln_ZM[j, :, q]
 
-        G[j, :] = np.min(G_tmp[j, :, :], axis=1)
-        M[j, :] = np.abs(M_sys[np.argmin(G_tmp[j, :, :], axis=1)])
+    G[j, :] = np.min(G_tmp[j, :, :], axis=1)
+    M[j, :] = np.abs(M_sys[np.argmin(G_tmp[j, :, :], axis=1)])
 
 G /= N
 M /= N
