@@ -70,6 +70,9 @@ print("JDOS read")
 
 # Partition function
 ln_ZM = np.zeros((H_vals, T_vals, M_vals))
+
+print(f"iterations for Z: {H_vals * M_vals * T_vals}")
+
 for j, h in enumerate(H):
     for i, t in enumerate(T):
         for q, m in enumerate(M_sys):
@@ -105,7 +108,7 @@ print("Computed minimization of G and variables")
 
 dSM = np.zeros((H_vals, T_vals))
 dSM_2 = np.zeros((H_vals, T_vals))
-dT = np.zeros((H_vals, T_vals))
+# dT = np.zeros((H_vals, T_vals))
 dM_dT_H = np.gradient(M, T, axis=1)
 
 for i, t in enumerate(T):
@@ -114,7 +117,7 @@ for i, t in enumerate(T):
 
         dSM[j, i] = np.trapz(np.interp(H_new, H[:j+1], dM_dT_H[:j+1, i]), H_new)
         dSM_2[j, i] = S[j, i] - S[0, i]
-        dT[j, i] = t * (np.exp(-np.trapz(np.interp(H_new, H[:j+1], dM_dT_H[:j+1, i] / C[:j+1, i]), H_new)) - 1)
+        # dT[j, i] = t * (np.exp(-np.trapz(np.interp(H_new, H[:j+1], dM_dT_H[:j+1, i] / C[:j+1, i]), H_new)) - 1)
 
 print("MCE calculations done")
 
@@ -167,27 +170,27 @@ plt.savefig(SAVE_FOLDER + f"TD_Ising_L{L}_{lattice}_npos{Sz_vals}" + SAVE_EXT)
 plt.subplots(1, 2, sharex="all")
 plt.figure(2)
 
-plt.subplot(1, 3, 1)
+plt.subplot(1, 2, 1)
 for j, h in enumerate(H):
     plt.plot(T, -dSM[j, :], label=h)
 plt.xlabel(r"$T$")
 plt.ylabel(r"$- \Delta S_M$ from MR")
 # plt.legend()
 
-plt.subplot(1, 3, 2)
+plt.subplot(1, 2, 2)
 for j, h in enumerate(H):
     plt.plot(T, -dSM_2[j, :], label=h)
 plt.xlabel(r"$T$")
 plt.ylabel(r"$- \Delta S_M$ from $\Delta S$")
 # plt.legend()
 
-plt.subplot(1, 3, 3)
-for j, h in enumerate(H):
-    plt.plot(T, dT[j, :], label=h)
-plt.xlabel(r"$T$")
-plt.ylabel(r"$\Delta T$")
-# plt.ylim([-0.05, 0.43])
-# plt.legend()
+# plt.subplot(1, 3, 3)
+# for j, h in enumerate(H):
+#     plt.plot(T, dT[j, :], label=h)
+# plt.xlabel(r"$T$")
+# plt.ylabel(r"$\Delta T$")
+# # plt.ylim([-0.05, 0.43])
+# # plt.legend()
 
 plt.subplots_adjust(left=0.1,
                     bottom=0.1,
