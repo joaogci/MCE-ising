@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
+from tqdm import tqdm
 
 plt.style.use('seaborn')
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
@@ -73,7 +74,7 @@ ln_ZM = np.zeros((H_vals, T_vals, M_vals))
 
 print(f"iterations for Z: {H_vals * M_vals * T_vals}")
 
-for j, h in enumerate(H):
+for j, h in enumerate(tqdm(H)):
     for i, t in enumerate(T):
         for q, m in enumerate(M_sys):
             hits = np.where(g[:, q] != 0.0)[0]
