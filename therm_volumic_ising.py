@@ -27,8 +27,8 @@ K = 50.0
 
 H_plot = [0.01, 0.02, 0.03, 0.04, 0.05, 0.1]
 
-T_max = 14.0
-T_vals = 64
+T_max = 25.0
+T_vals = 200
 H_max = 0.1
 H_vals = 21
 v_max = (0.5 * NN * Jp) / K
@@ -167,25 +167,36 @@ if not os.path.isdir(SAVE_FOLDER(L, lattice, Sz_vals, Jp, K)):
         for q, m in enumerate(M_sys):
             np.savetxt(SAVE_FOLDER(L, lattice, Sz_vals, Jp, K) + f"lnZ_q{q}_k{k}" + SAVE_EXT, ln_ZMv[:, :, q, k])
 
+# Save dSM for T and H for later plotting
+file_name = f"results/dSM_GMCE_L{L}_{lattice}_npos{Sz_vals}_Jp{Jp}_K{K}.dat"
+with open(file_name, "w") as file:
+    for i, t in enumerate(T):
+        file.write(f"{dSM[-1, i]} {t}\n")
+
 # Global plotting options
 plt.style.use('seaborn')
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['lines.marker'] = '.'
 matplotlib.rcParams['lines.linestyle'] = '-'
 matplotlib.rcParams['lines.linewidth'] = '1'
-matplotlib.rcParams['lines.markersize'] = '5'
+matplotlib.rcParams['lines.markersize'] = '7.5'
 matplotlib.rcParams['savefig.bbox'] = 'tight'
 matplotlib.rcParams['figure.subplot.left'] = '0.1'
 matplotlib.rcParams['figure.subplot.bottom'] = '0.1'
-matplotlib.rcParams['figure.subplot.right'] = '0.9'
-matplotlib.rcParams['figure.subplot.top'] = '0.9'
-matplotlib.rcParams['figure.subplot.wspace'] = '0.4'
-matplotlib.rcParams['figure.subplot.hspace'] = '0.4'
+matplotlib.rcParams['figure.subplot.right'] = '0.97'
+matplotlib.rcParams['figure.subplot.top'] = '0.97'
+matplotlib.rcParams['figure.subplot.wspace'] = '0.2'
+matplotlib.rcParams['figure.subplot.hspace'] = '0.2'
+matplotlib.rcParams['figure.figsize'] = (12, 4)
 
 if not os.path.isdir(SAVE_FOLDER_FIGS(L, lattice, Sz_vals, Jp, K)):
     if not os.path.isdir("figures/"):
         os.mkdir("figures/")
     os.mkdir(SAVE_FOLDER_FIGS(L, lattice, Sz_vals, Jp, K))
+
+max_T_idx = T_vals - 1
+if Sz_vals == 2:
+    max_T_idx = 2 * T_vals // 5
 
 # Plots
 plt.subplots(1, 3)
@@ -193,35 +204,35 @@ plt.figure(1)
 
 plt.subplot(1, 3, 1)
 skip = 1
-colors = plt.cm.viridis(np.linspace(0, 1, T_vals // skip))
-for i, t in enumerate(T):
+colors = plt.cm.viridis(np.linspace(0, 0.9, max_T_idx + 1))
+for i, t in enumerate(T[:max_T_idx + 1]):
     if i % skip == 0:
-        plt.plot(H, M[:, i], color=colors[i])
+        plt.plot(H, M[:, i], color=colors[i // skip])
 plt.plot(H, M[:, 0], color=colors[0], label=f"T = {T[0]}")
-plt.plot(H, M[:, -1], color=colors[-1], label=f"T = {T[-1]}")
+plt.plot(H, M[:, max_T_idx], color=colors[-1], label=f"T = {T[max_T_idx]}")
 plt.xlabel(r"$H$")
 plt.ylabel(r"$M$")
-plt.legend()
+# plt.legend()
 
 plt.subplot(1, 3, 2)
-colors = plt.cm.viridis(np.linspace(0, 1, len(H_plot) + 1))
+colors = plt.cm.viridis(np.linspace(0, 0.9, len(H_plot) + 1))
 i = 0
 for j, h in enumerate(H):
     if h not in H_plot and h != 0.0:
         continue
-    plt.plot(T, M[j, :], color=colors[i], label=f"H = {h}")
+    plt.plot(T[:max_T_idx + 1], M[j, :max_T_idx + 1], color=colors[i], label=f"H = {h}")
     i += 1
 plt.xlabel(r"$T$")
 plt.ylabel(r"$M$")
 plt.legend()
 
 plt.subplot(1, 3, 3)
-colors = plt.cm.viridis(np.linspace(0, 1, len(H_plot)))
+colors = plt.cm.viridis(np.linspace(0, 0.9, len(H_plot)))
 i = 0
 for j, h in enumerate(H):
     if h not in H_plot:
         continue
-    plt.plot(T, -dSM[j, :], color=colors[i], label=f"H: {H[0]} to {h}")
+    plt.plot(T[:max_T_idx + 1], -dSM[j, :max_T_idx + 1], color=colors[i], label=f"H: {H[0]} to {h}")
     i += 1
 plt.xlabel(r"$T$")
 plt.ylabel(r"$-\Delta S_M$")
