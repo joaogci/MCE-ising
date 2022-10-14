@@ -31,7 +31,7 @@ T_max = 25.0
 T_vals = 200
 H_max = 0.1
 H_vals = 21
-v_max = (4.0 * S**2 * NN / 2.0) / K
+v_max = (4.0 * S**2 * NN  * Jp / 2.0) / K
 v_vals = 51
 
 # Temperature, field, volume and J
