@@ -21,8 +21,6 @@ matplotlib.rcParams['figure.figsize'] = (5, 4)
 
 # Plots
 Jp = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5]
-npos = [2, 3]
-
 
 plt.figure(1)
 colors = plt.cm.viridis(np.linspace(0, 0.9, len(Jp) + 1))
@@ -45,6 +43,8 @@ plt.ylabel(r"$-\Delta S_M / \Delta S_M^{max; J^\prime=0}$")
 plt.legend()
 
 plt.savefig("figures/dSM_comparison_Jp_npos2.eps")
+
+Jp = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
 
 plt.figure(2)
 colors = plt.cm.viridis(np.linspace(0, 0.9, len(Jp) + 1))
