@@ -44,13 +44,13 @@ plt.legend()
 
 plt.savefig("figures/dSM_comparison_Jp_npos2.eps")
 
-Jp = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
+Jp = [0.5, 1.0, 1.5, 2.0]
 
 plt.figure(2)
 colors = plt.cm.viridis(np.linspace(0, 0.9, len(Jp) + 1))
 
-min_T_idx = 80
-max_T_idx = 200
+min_T_idx = 95
+max_T_idx = 145
 
 dSM_0 = np.loadtxt("results/dSM_MCE_L8_SC_npos3.dat")
 dSM_0_max = np.max(-dSM_0[:, 0])
